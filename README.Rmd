@@ -1,7 +1,14 @@
-# dplyrr - Tools for improvement of experience on dplyr with databases
-Koji MAKIYAMA  
+---
+title: "dplyrr - Tools for improvement of experience on dplyr with databases"
+author: "Koji MAKIYAMA"
+output:
+  html_document:
+    keep_md: yes
+---
 
-
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE, cache=FALSE)
+```
 
 ## Overview
 
@@ -23,8 +30,7 @@ For that purpose, I've create `dplyrr` package.
 
 ## How to Install
 
-
-```r
+```{r, eval=FALSE}
 install.packages("devtools") # if you have not installed "devtools" package
 devtools::install_github("hoxo-m/dplyrr")
 ```
@@ -34,8 +40,7 @@ devtools::install_github("hoxo-m/dplyrr")
 In this section, we use a database file, "my_db.sqlite3", for illustration.  
 If you want to trace the codes, you first create the databese.
 
-
-```r
+```{r, eval=FALSE}
 library(dplyrr)
 library(nycflights13)
 
@@ -47,23 +52,16 @@ copy_nycflights13(db)
 
 Usualy, when we use a database with `dplyr`, we first create database object, and we can see the tables in the databese by `show()`.
 
-
-```r
+```{r}
 library(dplyrr)
 # Create database object
 db <- src_sqlite("my_db.sqlite3")
 show(db)
 ```
 
-```
-## src:  sqlite 3.8.6 [my_db.sqlite3]
-## tbls: airlines, airports, flights, planes, sqlite_stat1, weather
-```
-
 Next, we create table objects for pulling data in some tables in the database.
 
-
-```r
+```{r, eval=FALSE}
 airlines_tbl <- tbl(db, "airlines")
 airports_tbl <- tbl(db, "airports")
 flights_tbl <- tbl(db, "flights")
@@ -75,32 +73,15 @@ Typing this code is really a bore!
 
 If you want to create table objects for **all tables in the databases**, you can use `load_tbls()`.
 
-
-```r
+```{r}
 load_tbls(db)
 ```
 
 Check the created table objects.
 
-
-```r
+```{r}
 ls(pattern = "_tbl$")
-```
-
-```
-## [1] "airlines_tbl"     "airports_tbl"     "flights_tbl"     
-## [4] "planes_tbl"       "sqlite_stat1_tbl" "weather_tbl"
-```
-
-```r
 glimpse(airlines_tbl)
-```
-
-```
-## Observations: 16
-## Variables:
-## $ carrier (chr) "9E", "AA", "AS", "B6", "DL", "EV", "F9", "FL", "HA", ...
-## $ name    (chr) "Endeavor Air Inc.", "American Airlines Inc.", "Alaska...
 ```
 
 ## Functions for PostgreSQL

@@ -9,3 +9,11 @@
 
 # RStudio files
 .Rproj.user/
+.Rproj.user
+
+my_db.sqlite3
+tests/testthat/my_db.sqlite3
+.Rhistory
+.RData
+README.html
+README_cache/
