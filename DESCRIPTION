@@ -9,7 +9,8 @@ Description: Tools for improvement of experience on dplyr with the databases
 License: MIT
 Suggests:
     testthat,
-    nycflights13
+    nycflights13,
+    RSQLite
 Depends:
     dplyr
 Imports:
