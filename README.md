@@ -8,12 +8,12 @@ Koji MAKIYAMA
 `dplyr` is the most powerful package for data handling in R, and it has also the ability of working with databases([See Vignette](http://cran.rstudio.com/web/packages/dplyr/vignettes/databases.html)).  
 But the functionalities of dealing with databases in `dplyr` is developing yet.
 
-Now, I'm trying to make `dplyr` with databases more comfortable by adding some functions.  
-For that purpose, I've create `dplyrr` package.
+Now, I'm trying to make `dplyr` with databases more comfortable by using some functions.  
+For that purpose, I've created `dplyrr` package.
 
 `dplyrr` has below functions:
 
-- `load_tbls()` : Easy to load table-object for all tables in a database.
+- `load_tbls()` : Easy to load table objects for all tables in a database.
 - `moving_average()` : Compute moving average for PostgreSQL.
 
 `dplyrr` is going to have below functions:
@@ -21,7 +21,7 @@ For that purpose, I've create `dplyrr` package.
 - Easy to create case statement with `cut()`.
 - Compute `first_value` for PostgreSQL.
 
-## How to Install
+## How to install
 
 
 ```r
@@ -29,7 +29,7 @@ install.packages("devtools") # if you have not installed "devtools" package
 devtools::install_github("hoxo-m/dplyrr")
 ```
 
-## Common Functions for All Databases
+## Common functions for all databases
 
 In this section, we use a database file, "my_db.sqlite3", for illustration.  
 If you want to trace the codes, you first create the databese.
@@ -73,7 +73,7 @@ weather_tbl <- tbl(db, "weather")
 
 Typing this code is really a bore!
 
-If you want to create table objects for **all tables in the databases**, you can use `load_tbls()`.
+If you want to create table objects for **all tables in the database**, you can use `load_tbls()`.
 
 
 ```r
