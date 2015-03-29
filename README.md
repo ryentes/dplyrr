@@ -32,7 +32,7 @@ devtools::install_github("hoxo-m/dplyrr")
 ## Common functions for all databases
 
 In this section, we use a database file, "my_db.sqlite3", for illustration.  
-If you want to trace the codes, you first create the databese.
+If you want to trace the codes, you should first create the databese.
 
 
 ```r
@@ -45,7 +45,7 @@ copy_nycflights13(db)
 
 ### `load_tbls()`
 
-Usualy, when we use a database with `dplyr`, we first create database object, and we can see the tables in the databese by `show()`.
+Usually, when we use a database with `dplyr`, we first create database object, and we can see the tables in the databese by `show()`.
 
 
 ```r
@@ -78,6 +78,15 @@ If you want to create table objects for **all tables in the database**, you can 
 
 ```r
 load_tbls(db)
+```
+
+```
+## airlines_tbl <- tbl(db, "airlines")
+## airports_tbl <- tbl(db, "airports")
+## flights_tbl <- tbl(db, "flights")
+## planes_tbl <- tbl(db, "planes")
+## sqlite_stat1_tbl <- tbl(db, "sqlite_stat1")
+## weather_tbl <- tbl(db, "weather")
 ```
 
 Check the created table objects.

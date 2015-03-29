@@ -38,7 +38,7 @@ devtools::install_github("hoxo-m/dplyrr")
 ## Common functions for all databases
 
 In this section, we use a database file, "my_db.sqlite3", for illustration.  
-If you want to trace the codes, you first create the databese.
+If you want to trace the codes, you should first create the databese.
 
 ```{r, eval=FALSE}
 library(dplyrr)
@@ -50,7 +50,7 @@ copy_nycflights13(db)
 
 ### `load_tbls()`
 
-Usualy, when we use a database with `dplyr`, we first create database object, and we can see the tables in the databese by `show()`.
+Usually, when we use a database with `dplyr`, we first create database object, and we can see the tables in the databese by `show()`.
 
 ```{r}
 library(dplyrr)
@@ -73,7 +73,7 @@ Typing this code is really a bore!
 
 If you want to create table objects for **all tables in the database**, you can use `load_tbls()`.
 
-```{r}
+```{r message=TRUE}
 load_tbls(db)
 ```
 
