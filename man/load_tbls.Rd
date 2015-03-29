@@ -4,7 +4,7 @@
 \alias{load_tbls}
 \title{Load the table objects for all tables in a database}
 \usage{
-load_tbls(db, envir = parent.frame())
+load_tbls(db, envir = parent.frame(), verbose = TRUE)
 }
 \arguments{
 \item{db}{a database object}

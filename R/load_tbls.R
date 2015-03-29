@@ -4,8 +4,10 @@
 #' @param envir the environment to load table objects
 #' 
 #' @export
-load_tbls <- function(db, envir = parent.frame()) {
+load_tbls <- function(db, envir = parent.frame(), verbose = TRUE) {
   tbl_names <- dplyr::src_tbls(db)
   commands <- sprintf('%s_tbl <- tbl(db, "%s")', tbl_names, tbl_names)
   eval(parse(text = commands), envir = envir)
+  if(verbose) cat(paste(sprintf("%s\n", commands), collapse=""))
+  invisible(NULL)
 }
