@@ -14,11 +14,11 @@ For that purpose, I've created `dplyrr` package.
 `dplyrr` has below functions:
 
 - `load_tbls()` : Easy to load table objects for all tables in a database.
+- `case_cut()` : Easy to create a case statement by using the grammar like the `base::cut()`.
 - `moving_average()` : Compute moving average for PostgreSQL.
 
 `dplyrr` is going to have below functions:
 
-- Easy to create case statement with `cut()`.
 - Compute `first_value` for PostgreSQL.
 
 ## How to install
@@ -32,7 +32,7 @@ devtools::install_github("hoxo-m/dplyrr")
 ## Common functions for all databases
 
 In this section, we use a database file, "my_db.sqlite3", for illustration.  
-If you want to trace the codes, you should first create the databese.
+If you want to trace codes below, you should first create the databese.
 
 
 ```r
@@ -111,6 +111,77 @@ glimpse(airlines_tbl)
 ## $ carrier (chr) "9E", "AA", "AS", "B6", "DL", "EV", "F9", "FL", "HA", ...
 ## $ name    (chr) "Endeavor Air Inc.", "American Airlines Inc.", "Alaska...
 ```
+
+### `case_cut()`
+
+If you want to write case statement with like cut(), you can `case_cut()` function.
+
+For example, there is `air_time` column in the database.
+
+
+```r
+db <- src_sqlite("my_db.sqlite3")
+flights_tbl <- tbl(db, "flights")
+q <- flights_tbl %>% select(air_time)
+air_time <- q %>% collect
+head(air_time, 3)
+```
+
+```
+## Source: local data frame [3 x 1]
+## 
+##   air_time
+## 1      227
+## 2      227
+## 3      160
+```
+
+If you want to group the `air_time` by break points `c(0, 80, 120, 190, 900)`, you think you must write next code.
+
+
+```r
+q <- flights_tbl %>% 
+  select(air_time) %>%
+  mutate(air_time_cut=if(air_time > 0 && air_time <= 80) "(0,80]"
+         else if(air_time > 80 && air_time <= 120) "(80,120]"
+         else if(air_time > 120 && air_time <= 190) "(120,190]"
+         else if(air_time > 190 && air_time <= 900) "(190,900]")
+air_time_with_cut <- q %>% collect
+head(air_time_with_cut, 3)
+```
+
+```
+## Source: local data frame [3 x 2]
+## 
+##   air_time air_time_cut
+## 1      227    (190,900]
+## 2      227    (190,900]
+## 3      160    (120,190]
+```
+
+When the break points increase, you are going to be tired to write more lines.
+
+Using `case_cut()` function, it can be easily.
+
+
+```r
+q <- flights_tbl %>% 
+  select(air_time) %>%
+  case_cut(air_time_cut=air_time, breaks=c(0, 80, 120, 190, 900))
+air_time_with_cut <- q %>% collect
+head(air_time_with_cut, 3)
+```
+
+```
+## Source: local data frame [3 x 2]
+## 
+##   air_time air_time_cut
+## 1      227    (190,900]
+## 2      227    (190,900]
+## 3      160    (120,190]
+```
+
+The `case_cut()` has more arguments such as `labels` comming from `base::cut()`.
 
 ## Functions for PostgreSQL
 
