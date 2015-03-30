@@ -123,9 +123,22 @@ air_time_with_cut <- q %>% collect
 head(air_time_with_cut, 3)
 ```
 
-The `case_cut()` has more arguments such as `labels` comming from `base::cut()`.
+The `case_cut()` has more arguments such as `labels` coming from `base::cut()`.
 
 ## Functions for PostgreSQL
 
 ### `moving_average()`
+
+```{r}
+db <- src_postgres()
+account_tbl <- tbl(db, "account")
+q <- account_tbl %>% 
+  filter(between(register_datetime, "2010-09-01", "2010-10-01")) %>%
+  count(date=date_trunc("days", register_datetime)) %>%
+  rename(account_num=n) %>%
+  arrange(date) %>%
+  moving_average(moving_average3=account_num(1), moving_average5=account_num(2))
+data <- q %>% collect
+data
+```
 
