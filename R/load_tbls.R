@@ -6,8 +6,13 @@
 #' @export
 load_tbls <- function(db, envir = parent.frame(), verbose = TRUE) {
   tbl_names <- dplyr::src_tbls(db)
-  commands <- sprintf('%s_tbl <- tbl(db, "%s")', tbl_names, tbl_names)
-  eval(parse(text = commands), envir = envir)
-  if(verbose) cat(paste(sprintf("%s\n", commands), collapse=""))
+  tbl_obj_names <- sprintf('%s_tbl', tbl_names)
+  commands <- sprintf('tbl(db, "%s")', tbl_names)
+  for(i in seq_along(tbl_obj_names)) {
+    tbl_obj_name <- tbl_obj_names[i]
+    command <- commands[i]
+    assign(tbl_obj_name, eval(command), envir = envir)
+    if(verbose) cat(paste(sprintf("%s <- %s\n", tbl_obj_name, command)))
+  }
   invisible(NULL)
 }
