@@ -7,12 +7,11 @@
 load_tbls <- function(db, envir = parent.frame(), verbose = TRUE) {
   tbl_names <- dplyr::src_tbls(db)
   tbl_obj_names <- sprintf('%s_tbl', tbl_names)
-  commands <- sprintf('tbl(db, "%s")', tbl_names)
   for(i in seq_along(tbl_obj_names)) {
+    tbl_name <- tbl_names[i]
     tbl_obj_name <- tbl_obj_names[i]
-    command <- commands[i]
-    assign(tbl_obj_name, eval(parse(text = command)), envir = envir)
-    if(verbose) cat(paste(sprintf("%s <- %s\n", tbl_obj_name, command)))
+    assign(tbl_obj_name, dplyr::tbl(db, tbl_name), envir = envir)
+    if(verbose) cat(paste(sprintf("Creating %s ...\n", tbl_obj_name)))
   }
   invisible(NULL)
 }
