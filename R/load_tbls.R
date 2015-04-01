@@ -11,7 +11,7 @@ load_tbls <- function(db, envir = parent.frame(), verbose = TRUE) {
   for(i in seq_along(tbl_obj_names)) {
     tbl_obj_name <- tbl_obj_names[i]
     command <- commands[i]
-    assign(tbl_obj_name, eval(command), envir = envir)
+    assign(tbl_obj_name, eval(parse(text = command)), envir = envir)
     if(verbose) cat(paste(sprintf("%s <- %s\n", tbl_obj_name, command)))
   }
   invisible(NULL)
