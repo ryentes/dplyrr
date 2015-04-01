@@ -20,8 +20,6 @@ case_cut <- function(.data, ..., breaks, labels = NULL, include.lowest = FALSE, 
   
   if(is.null(labels)) {
     labels <- levels(cut(0, breaks, labels, include.lowest, right, dig.lab))
-  } else if(labels == "-") {
-    labels <- levels(cut(0, breaks, labels, include.lowest, right, dig.lab))
   }
   for(i in seq_along(labels)) {
     n <- length(labels)

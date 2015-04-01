@@ -1,7 +1,7 @@
 #' Update the package
 #'
-#' @usage dplyrr::update()
+#' @usage dplyrr::update_dplyrr()
 #' 
-update <- function() {
+update_dplyrr <- function() {
   devtools::install_github("hoxo-m/dplyrr")
 }
