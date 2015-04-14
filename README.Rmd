@@ -22,6 +22,7 @@ For that purpose, I've created `dplyrr` package.
 
 - `load_tbls()` : Easy to load table objects for all tables in a database.
 - `case_cut()` : Easy to create a case statement by using the grammar like the `base::cut()`.
+- `filter()` : Improved `filter()` for `tbl_sql` which adds parentheses appropriately.
 - `moving_average()` : Compute moving average for PostgreSQL.
 
 `dplyrr` is going to have below functions:
@@ -125,11 +126,39 @@ head(air_time_with_cut, 3)
 
 The `case_cut()` has more arguments such as `labels` coming from `base::cut()`.
 
+### Improved `filter()`
+
+```{r}
+detach("package:dplyrr", unload = TRUE)
+detach("package:dplyr", unload = TRUE)
+library(dplyr)
+
+db <- src_sqlite("my_db.sqlite3")
+flights_tbl <- tbl(db, "flights")
+q <- flights_tbl %>%
+  select(month, air_time) %>%
+  filter(month == 1) %>%
+  filter(air_time > 200 || air_time < 100)
+q$query
+```
+
+```{r}
+library(dplyrr)
+
+db <- src_sqlite("my_db.sqlite3")
+flights_tbl <- tbl(db, "flights")
+q <- flights_tbl %>%
+  select(month, air_time) %>%
+  filter(month == 1) %>%
+  filter(air_time > 200 || air_time < 100)
+q$query
+```
+
 ## Functions for PostgreSQL
 
 ### `moving_average()`
 
-```{r}
+```{r eval=FALSE}
 db <- src_postgres()
 account_tbl <- tbl(db, "account")
 q <- account_tbl %>% 

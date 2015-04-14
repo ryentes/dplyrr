@@ -15,6 +15,7 @@ For that purpose, I've created `dplyrr` package.
 
 - `load_tbls()` : Easy to load table objects for all tables in a database.
 - `case_cut()` : Easy to create a case statement by using the grammar like the `base::cut()`.
+- `filter()` : Improved `filter()` for `tbl_sql` which adds parentheses appropriately.
 - `moving_average()` : Compute moving average for PostgreSQL.
 
 `dplyrr` is going to have below functions:
@@ -81,12 +82,12 @@ load_tbls(db)
 ```
 
 ```
-## airlines_tbl <- tbl(db, "airlines")
-## airports_tbl <- tbl(db, "airports")
-## flights_tbl <- tbl(db, "flights")
-## planes_tbl <- tbl(db, "planes")
-## sqlite_stat1_tbl <- tbl(db, "sqlite_stat1")
-## weather_tbl <- tbl(db, "weather")
+## Loading: airlines_tbl
+## Loading: airports_tbl
+## Loading: flights_tbl
+## Loading: planes_tbl
+## Loading: sqlite_stat1_tbl
+## Loading: weather_tbl
 ```
 
 Check the created table objects.
@@ -183,6 +184,50 @@ head(air_time_with_cut, 3)
 
 The `case_cut()` has more arguments such as `labels` coming from `base::cut()`.
 
+### Improved `filter()`
+
+
+```r
+detach("package:dplyrr", unload = TRUE)
+detach("package:dplyr", unload = TRUE)
+library(dplyr)
+
+db <- src_sqlite("my_db.sqlite3")
+flights_tbl <- tbl(db, "flights")
+q <- flights_tbl %>%
+  select(month, air_time) %>%
+  filter(month == 1) %>%
+  filter(air_time > 200 || air_time < 100)
+q$query
+```
+
+```
+## <Query> SELECT "month" AS "month", "air_time" AS "air_time"
+## FROM "flights"
+## WHERE "month" = 1.0 AND "air_time" > 200.0 OR "air_time" < 100.0
+## <SQLiteConnection>
+```
+
+
+```r
+library(dplyrr)
+
+db <- src_sqlite("my_db.sqlite3")
+flights_tbl <- tbl(db, "flights")
+q <- flights_tbl %>%
+  select(month, air_time) %>%
+  filter(month == 1) %>%
+  filter(air_time > 200 || air_time < 100)
+q$query
+```
+
+```
+## <Query> SELECT "month" AS "month", "air_time" AS "air_time"
+## FROM "flights"
+## WHERE ("month" = 1.0) AND ("air_time" > 200.0 OR "air_time" < 100.0)
+## <SQLiteConnection>
+```
+
 ## Functions for PostgreSQL
 
 ### `moving_average()`
@@ -199,22 +244,5 @@ q <- account_tbl %>%
   moving_average(moving_average3=account_num(1), moving_average5=account_num(2))
 data <- q %>% collect
 data
-```
-
-```
-## Source: local data frame [30 x 4]
-## 
-##          date account_num moving_average3 moving_average5
-## 1  2010-09-01          56           71.50           73.67
-## 2  2010-09-02          87           73.67           63.00
-## 3  2010-09-03          78           65.33           59.80
-## 4  2010-09-04          31           52.00           65.60
-## 5  2010-09-05          47           54.33           79.20
-## 6  2010-09-06          85           95.67           78.40
-## 7  2010-09-07         155          104.67           89.00
-## 8  2010-09-08          74          104.33          116.00
-## 9  2010-09-09          84          113.33          117.40
-## 10 2010-09-10         182          119.33           99.00
-## ..        ...         ...             ...             ...
 ```
 
