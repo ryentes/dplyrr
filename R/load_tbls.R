@@ -10,10 +10,8 @@ load_tbls <- function(db, envir = parent.frame(), verbose = TRUE) {
   for(i in seq_along(tbl_obj_names)) {
     tbl_name <- tbl_names[i]
     tbl_obj_name <- tbl_obj_names[i]
-    if(!(tbl_obj_name %in% ls(envir = envir))) {
-      assign(tbl_obj_name, dplyr::tbl(db, tbl_name), envir = envir)
-      if(verbose) cat(paste(sprintf("Loading: %s\n", tbl_obj_name)))
-    }
+    assign(tbl_obj_name, dplyr::tbl(db, tbl_name), envir = envir)
+    if(verbose) cat(paste(sprintf("Loading: %s\n", tbl_obj_name)))
   }
   invisible()
 }
