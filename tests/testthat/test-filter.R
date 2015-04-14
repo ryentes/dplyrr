@@ -12,5 +12,5 @@ test_that("Basic behavior", {
     filter(month == 1) %>%
     filter(air_time > 200 || air_time < 100)
   data <- q %>% collect
-  expect_equal(nrow(data), 26398)
+  expect_equal(nrow(data), 14482)
 })
