@@ -5,9 +5,9 @@
 #' 
 #' @export
 load_tbls <- function(db, envir = parent.frame(), verbose = TRUE) {
-#   if(missing(db)) {
-#     db <- eval(parse(text="db"), envir = envir)
-#   }
+  if(missing(db)) {
+    db <- eval(quote(db), envir = envir)
+  }
   tbl_names <- dplyr::src_tbls(db)
   tbl_obj_names <- sprintf('%s_tbl', tbl_names)
   for(i in seq_along(tbl_obj_names)) {
