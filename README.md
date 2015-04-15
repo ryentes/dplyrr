@@ -32,8 +32,8 @@ devtools::install_github("hoxo-m/dplyrr")
 
 ## Common functions for all databases
 
-In this section, we use a database file, "my_db.sqlite3", for illustration.  
-If you want to trace codes below, you should first create the databese.
+For illustration, we use a database file: "my_db.sqlite3".  
+If you want to trace the codes below, you should first create the databese file.
 
 
 ```r
@@ -115,7 +115,7 @@ glimpse(airlines_tbl)
 
 ### `case_cut()`
 
-If you want to write case statement with like cut(), you can `case_cut()` function.
+If you want to write case statement with like `cut()`, you can `case_cut()` function.
 
 For example, there is `air_time` column in the database.
 
@@ -187,9 +187,11 @@ The `case_cut()` has more arguments such as `labels` coming from `base::cut()`.
 ### Improved `filter()`
 
 
+
+If you use `dplyr` with databases in pure mind, you can encounter the unintended action like below.
+
+
 ```r
-detach("package:dplyrr", unload = TRUE)
-detach("package:dplyr", unload = TRUE)
 library(dplyr)
 
 db <- src_sqlite("my_db.sqlite3")
@@ -207,6 +209,10 @@ q$query
 ## WHERE "month" = 1.0 AND "air_time" > 200.0 OR "air_time" < 100.0
 ## <SQLiteConnection>
 ```
+
+Did you expect the where clause to be that?
+
+If you use `dplyrr`, it becomes natural by adding parentheses.
 
 
 ```r
@@ -241,8 +247,25 @@ q <- account_tbl %>%
   count(date=date_trunc("days", register_datetime)) %>%
   rename(account_num=n) %>%
   arrange(date) %>%
-  moving_average(moving_average3=account_num(1), moving_average5=account_num(2))
+  moving_average(moving_average_3days=account_num(1), moving_average_5days=account_num(2))
 data <- q %>% collect
 data
+```
+
+```
+## Source: local data frame [30 x 4]
+## 
+##          date account_num moving_average_3days moving_average_5days
+## 1  2010-09-01          56                71.50                73.67
+## 2  2010-09-02          87                73.67                63.00
+## 3  2010-09-03          78                65.33                59.80
+## 4  2010-09-04          31                52.00                65.60
+## 5  2010-09-05          47                54.33                79.20
+## 6  2010-09-06          85                95.67                78.40
+## 7  2010-09-07         155               104.67                89.00
+## 8  2010-09-08          74               104.33               116.00
+## 9  2010-09-09          84               113.33               117.40
+## 10 2010-09-10         182               119.33                99.00
+## ..        ...         ...                  ...                  ...
 ```
 

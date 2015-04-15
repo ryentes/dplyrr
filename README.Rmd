@@ -38,8 +38,8 @@ devtools::install_github("hoxo-m/dplyrr")
 
 ## Common functions for all databases
 
-In this section, we use a database file, "my_db.sqlite3", for illustration.  
-If you want to trace codes below, you should first create the databese.
+For illustration, we use a database file: "my_db.sqlite3".  
+If you want to trace the codes below, you should first create the databese file.
 
 ```{r, eval=FALSE}
 library(dplyrr)
@@ -87,7 +87,7 @@ glimpse(airlines_tbl)
 
 ### `case_cut()`
 
-If you want to write case statement with like cut(), you can `case_cut()` function.
+If you want to write case statement with like `cut()`, you can `case_cut()` function.
 
 For example, there is `air_time` column in the database.
 
@@ -128,9 +128,14 @@ The `case_cut()` has more arguments such as `labels` coming from `base::cut()`.
 
 ### Improved `filter()`
 
-```{r}
+```{r echo=FALSE}
 detach("package:dplyrr", unload = TRUE)
 detach("package:dplyr", unload = TRUE)
+```
+
+If you use `dplyr` with databases in pure mind, you can encounter the unintended action like below.
+
+```{r}
 library(dplyr)
 
 db <- src_sqlite("my_db.sqlite3")
@@ -141,6 +146,10 @@ q <- flights_tbl %>%
   filter(air_time > 200 || air_time < 100)
 q$query
 ```
+
+Did you expect the where clause to be that?
+
+If you use `dplyrr`, it becomes natural by adding parentheses.
 
 ```{r}
 library(dplyrr)
@@ -158,7 +167,7 @@ q$query
 
 ### `moving_average()`
 
-```{r eval=FALSE}
+```{r}
 db <- src_postgres()
 account_tbl <- tbl(db, "account")
 q <- account_tbl %>% 
@@ -166,7 +175,7 @@ q <- account_tbl %>%
   count(date=date_trunc("days", register_datetime)) %>%
   rename(account_num=n) %>%
   arrange(date) %>%
-  moving_average(moving_average3=account_num(1), moving_average5=account_num(2))
+  moving_average(moving_average_3days=account_num(1), moving_average_5days=account_num(2))
 data <- q %>% collect
 data
 ```
