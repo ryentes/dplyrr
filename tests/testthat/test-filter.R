@@ -14,3 +14,14 @@ test_that("Basic behavior", {
   data <- q %>% collect
   expect_equal(nrow(data), 14482)
 })
+
+test_that("Use variable", {
+  db <- src_sqlite("my_db.sqlite3")
+  flights_tbl <- tbl(db, "flights")
+  n <- 1
+  q <- flights_tbl %>%
+    filter(month == n) %>%
+    filter(air_time > 200 || air_time < 100)
+  data <- q %>% collect
+  expect_equal(nrow(data), 14482)
+})
