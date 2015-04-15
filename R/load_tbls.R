@@ -15,11 +15,10 @@ load_tbls <- function(db, envir = parent.frame(), verbose = TRUE) {
       if(verbose) cat(paste(sprintf("Loading: %s\n", tbl_obj_name)))
     }
     if(tbl_obj_name %in% ls(envir = envir)) {
-      tryCatch({
-        eval(parse(text=tbl_obj_name), envir = envir)
-      }, error = function(e) {
+      expr <- sprintf("dplyr::db_has_table(%s$src$con, '%s')", tbl_obj_name, tbl_name)
+      if(!eval(parse(text=expr), envir=envir)) {
         load_tbl()
-      })
+      }
     } else {
       load_tbl()
     }
