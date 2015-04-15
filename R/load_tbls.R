@@ -5,6 +5,9 @@
 #' 
 #' @export
 load_tbls <- function(db, envir = parent.frame(), verbose = TRUE) {
+#   if(missing(db)) {
+#     db <- eval(parse(text="db"), envir = envir)
+#   }
   tbl_names <- dplyr::src_tbls(db)
   tbl_obj_names <- sprintf('%s_tbl', tbl_names)
   for(i in seq_along(tbl_obj_names)) {
@@ -16,9 +19,11 @@ load_tbls <- function(db, envir = parent.frame(), verbose = TRUE) {
     }
     if(tbl_obj_name %in% ls(envir = envir)) {
       expr <- sprintf("dplyr::db_has_table(%s$src$con, '%s')", tbl_obj_name, tbl_name)
-      if(!eval(parse(text=expr), envir=envir)) {
+      tryCatch({
+        eval(parse(text=expr), envir=envir)
+      }, error=function(e) {
         load_tbl()
-      }
+      }, silent=TRUE)
     } else {
       load_tbl()
     }
