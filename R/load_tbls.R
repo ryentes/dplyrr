@@ -19,12 +19,17 @@ load_tbls <- function(db, envir = parent.frame(), verbose = TRUE) {
     }
     if(tbl_obj_name %in% ls(envir = envir)) {
       expr <- sprintf("!dplyr::db_has_table(%s$src$con, '%s')", tbl_obj_name, tbl_name)
-      old_options <- options(show.error.messages = FALSE)
-      is_closed_connection <- suppressWarnings(eval(parse(text=expr), envir=envir))
-      options(old_options)
-      if(is_closed_connection) {
-        load_tbl()
-      }
+      options(show.error.messages = FALSE)
+      tryCatch({
+        is_closed_connection <- suppressWarnings(eval(parse(text=expr), envir=envir))
+        if(is_closed_connection) {
+          load_tbl()
+        }
+      }, error=function(e) {
+        stop(e)
+      }, finally={
+        options(show.error.messages = TRUE)
+      })
     } else {
       load_tbl()
     }
