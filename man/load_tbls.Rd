@@ -4,16 +4,21 @@
 \alias{load_tbls}
 \title{Load the table objects for all tables in a database}
 \usage{
-load_tbls(db, envir = parent.frame(), verbose = TRUE, tolower = TRUE)
+load_tbls(db, prefix = "", suffix = "_tbl", envir = parent.frame(),
+  verbose = TRUE, tolower = TRUE)
 }
 \arguments{
 \item{db}{a database object}
+
+\item{prefix}{a prefix string for names of table objects. default is empty.}
+
+\item{suffix}{a suffix string for names of table objects. default is "_tbl".}
 
 \item{envir}{the environment to load table objects}
 
 \item{verbose}{logical. indicates whether to display status. default is TRUE.}
 
-\item{tolower}{logical. indicates whether to convert the table object names to lower case. default is TRUE.}
+\item{tolower}{logical. indicates whether to convert the names of table objects to lower case. default is TRUE.}
 }
 \description{
 Load the table objects for all tables in a database

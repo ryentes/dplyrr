@@ -1,20 +1,22 @@
 #' Load the table objects for all tables in a database
 #'
 #' @param db a database object
+#' @param prefix a prefix string for names of table objects. default is empty.
+#' @param suffix a suffix string for names of table objects. default is "_tbl".
 #' @param envir the environment to load table objects
 #' @param verbose logical. indicates whether to display status. default is TRUE.
-#' @param tolower logical. indicates whether to convert the table object names to lower case. default is TRUE.
+#' @param tolower logical. indicates whether to convert the names of table objects to lower case. default is TRUE.
 #' 
 #' @export
-load_tbls <- function(db, envir = parent.frame(), verbose = TRUE, tolower = TRUE) {
+load_tbls <- function(db, prefix = "", suffix = "_tbl", envir = parent.frame(), verbose = TRUE, tolower = TRUE) {
   if(missing(db)) {
     db <- eval(quote(db), envir = envir)
   }
   tbl_names <- dplyr::src_tbls(db)
   if(tolower) {
-    tbl_obj_names <- sprintf('%s_tbl', tolower(tbl_names))
+    tbl_obj_names <- paste0(prefix, tolower(tbl_names), suffix)
   } else {
-    tbl_obj_names <- sprintf('%s_tbl', tbl_names)
+    tbl_obj_names <- paste0(prefix, tbl_names, suffix)
   }
   for(i in seq_along(tbl_obj_names)) {
     tbl_name <- tbl_names[i]
