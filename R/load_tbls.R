@@ -2,14 +2,20 @@
 #'
 #' @param db a database object
 #' @param envir the environment to load table objects
+#' @param verbose logical. indicates whether to display status. default is TRUE.
+#' @param tolower logical. indicates whether to convert the table object names to lower case. default is TRUE.
 #' 
 #' @export
-load_tbls <- function(db, envir = parent.frame(), verbose = TRUE) {
+load_tbls <- function(db, envir = parent.frame(), verbose = TRUE, tolower = TRUE) {
   if(missing(db)) {
     db <- eval(quote(db), envir = envir)
   }
   tbl_names <- dplyr::src_tbls(db)
-  tbl_obj_names <- sprintf('%s_tbl', tbl_names)
+  if(tolower) {
+    tbl_obj_names <- sprintf('%s_tbl', tolower(tbl_names))
+  } else {
+    tbl_obj_names <- sprintf('%s_tbl', tbl_names)
+  }
   for(i in seq_along(tbl_obj_names)) {
     tbl_name <- tbl_names[i]
     tbl_obj_name <- tbl_obj_names[i]
