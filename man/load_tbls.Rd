@@ -5,7 +5,7 @@
 \title{Load the table objects for all tables in a database}
 \usage{
 load_tbls(db, prefix = "", suffix = "_tbl", envir = parent.frame(),
-  verbose = TRUE, tolower = TRUE)
+  verbose = TRUE, tolower = TRUE, force = FALSE)
 }
 \arguments{
 \item{db}{a database object}
@@ -19,6 +19,8 @@ load_tbls(db, prefix = "", suffix = "_tbl", envir = parent.frame(),
 \item{verbose}{logical. indicates whether to display status. default is TRUE.}
 
 \item{tolower}{logical. indicates whether to convert the names of table objects to lower case. default is TRUE.}
+
+\item{force}{logical. indicates whether to load tables forced. deafult is FALSE.}
 }
 \description{
 Load the table objects for all tables in a database

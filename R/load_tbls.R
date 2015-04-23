@@ -6,9 +6,16 @@
 #' @param envir the environment to load table objects
 #' @param verbose logical. indicates whether to display status. default is TRUE.
 #' @param tolower logical. indicates whether to convert the names of table objects to lower case. default is TRUE.
+#' @param force logical. indicates whether to load tables forced. deafult is FALSE.
 #' 
 #' @export
-load_tbls <- function(db, prefix = "", suffix = "_tbl", envir = parent.frame(), verbose = TRUE, tolower = TRUE) {
+load_tbls <- function(db, 
+                      prefix = "", 
+                      suffix = "_tbl", 
+                      envir = parent.frame(), 
+                      verbose = TRUE, 
+                      tolower = TRUE,
+                      force = FALSE) {
   if(missing(db)) {
     db <- eval(quote(db), envir = envir)
   }
@@ -25,7 +32,7 @@ load_tbls <- function(db, prefix = "", suffix = "_tbl", envir = parent.frame(), 
       assign(tbl_obj_name, dplyr::tbl(db, tbl_name), envir = envir)
       if(verbose) cat(paste(sprintf("Loading: %s\n", tbl_obj_name)))
     }
-    if(tbl_obj_name %in% ls(envir = envir)) {
+    if(force || tbl_obj_name %in% ls(envir = envir)) {
       expr <- sprintf("!dplyr::db_has_table(%s$src$con, '%s')", tbl_obj_name, tbl_name)
       options(show.error.messages = FALSE)
       tryCatch({
