@@ -17,7 +17,7 @@ mutate_cut <- function(d) {
     lower.op <- ">="
     higher.op <- "<"
   }
-  args$x <- as.character(args$x)
+  args$x <- deparse(args$x)
   args$breaks <- eval(args$breaks, env = d$env)
   args$include.lowest <- eval(args$include.lowest, env = d$env)
   args$right <- eval(args$right, env = d$env)
