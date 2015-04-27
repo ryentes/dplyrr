@@ -33,6 +33,13 @@ test_that("calculation in x for sqlite", {
   expect_equal(result$y, c(NA, NA, "(1,3]", "(1,3]", "(1,3]"))
 })
 
+test_that("using cut in mutate with labels shortcut for sqlite", {
+  q <- temp_tbl %>% 
+    mutate(y=cut(x, c(1, 3, 5), labels="-"))
+  result <- q %>% collect
+  expect_equal(result$y, c(NA, "2-3", "2-3", "4-5", "4-5"))
+})
+
 if(!is.null(tbls$postgres)) {
   temp_tbl <- tbls$postgres$df
 
@@ -62,6 +69,13 @@ if(!is.null(tbls$postgres)) {
       mutate(y=cut(x / 2, c(1, 3, 5)))
     result <- q %>% collect
     expect_equal(result$y, c(NA, NA, "(1,3]", "(1,3]", "(1,3]"))
+  })
+
+  test_that("using cut in mutate with labels shortcut for postgres", {
+    q <- temp_tbl %>% 
+      mutate(y=cut(x, c(1, 3, 5), labels="-"))
+    result <- q %>% collect
+    expect_equal(result$y, c(NA, "2-3", "2-3", "4-5", "4-5"))
   })
   
 }

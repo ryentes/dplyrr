@@ -30,6 +30,11 @@ mutate_cut <- function(d) {
   } else {
     args$labels <- eval(args$labels, env = d$env)
   }
+  if(length(args$labels) == 1 && args$labels == "-") {
+    args$labels <- generate_range_labels(args$breaks, 
+                                         include.lowest = args$include.lowest,
+                                         right = args$right)
+  }
   expr <- with(args, {
     expr <- ""
     n <- length(args$labels)
