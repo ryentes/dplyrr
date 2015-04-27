@@ -16,6 +16,8 @@ generate_range_labels <- function(breaks, include.lowest = FALSE, right = TRUE,
         }
         if(p == -Inf) {
           label <- sprintf("%s%s%s%s", left_char, center, n, right_char)
+        } else if(n == Inf) {
+          label <- sprintf("%s%s%s%s", left_char, p, center, right_char)
         } else if(p == n) {
           label <- sprintf("%s%s%s", left_char, p, right_char)
         } else {
@@ -25,7 +27,9 @@ generate_range_labels <- function(breaks, include.lowest = FALSE, right = TRUE,
         if(i != len || !include.lowest) {
           n <- n - 1
         }
-        if(n == Inf) {
+        if(p == -Inf) {
+          label <- sprintf("%s%s%s%s", left_char, center, n, right_char)
+        } else if(n == Inf) {
           label <- sprintf("%s%s%s%s", left_char, p, center, right_char)
         } else if(p == n) {
           label <- sprintf("%s%s%s", left_char, p, right_char)

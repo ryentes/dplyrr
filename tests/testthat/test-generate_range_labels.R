@@ -17,3 +17,9 @@ test_that("generate range labels by one number", {
   labels <- generate_range_labels(breaks)
   expect_equal(labels, c("2", "3"))
 })
+
+test_that("generate range labels with Inf", {
+  breaks <- c(1, 3, Inf)
+  labels <- generate_range_labels(breaks)
+  expect_equal(labels, c("2-3", "4-"))
+})
