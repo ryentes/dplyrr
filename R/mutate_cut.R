@@ -27,6 +27,8 @@ mutate_cut <- function(d) {
       levels(cut(0, breaks = breaks, include.lowest = include.lowest, 
                  right = right, dig.lab = dig.lab))
     })
+  } else {
+    args$labels <- eval(args$labels, env = d$env)
   }
   expr <- with(args, {
     expr <- ""
