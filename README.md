@@ -14,7 +14,7 @@ For that purpose, I've created `dplyrr` package.
 `dplyrr` has below functions:
 
 - `load_tbls()` : Easy to load table objects for all tables in a database.
-- `case_cut()` : Easy to create a case statement by using the grammar like the `base::cut()`.
+- `cut()` in `mutate()` : Easy to create a case statement by using the grammar like the `base::cut()`.
 - `filter()` : Improved `filter()` for `tbl_sql` which adds parentheses appropriately.
 - `moving_average()` : Compute moving average for PostgreSQL.
 
@@ -113,9 +113,9 @@ glimpse(airlines_tbl)
 ## $ name    (chr) "Endeavor Air Inc.", "American Airlines Inc.", "Alaska...
 ```
 
-### `case_cut()`
+### `cut()` in `mutate()`
 
-If you want to write case statement with like `cut()`, you can `case_cut()` function.
+If you want to write case statement with like `base::cut()`, you can use `cut()` function in `mutate()`.
 
 For example, there is `air_time` column in the database.
 
@@ -137,7 +137,7 @@ head(air_time, 3)
 ## 3      160
 ```
 
-If you want to group the `air_time` by break points `c(0, 80, 120, 190, 900)`, you think you must write next code.
+If you want to group the `air_time` by break points `c(0, 80, 120, 190, 900)`, you think you must write the next code.
 
 
 ```r
@@ -162,13 +162,13 @@ head(air_time_with_cut, 3)
 
 When the break points increase, you are going to be tired to write more lines.
 
-Using `case_cut()` function, it can be easily.
+By using `cut()` function in `mutate()`, it can become easy.
 
 
 ```r
 q <- flights_tbl %>% 
   select(air_time) %>%
-  case_cut(air_time_cut=air_time, breaks=c(0, 80, 120, 190, 900))
+  mutate(air_time_cut=cut(air_time, breaks=c(0, 80, 120, 190, 900)))
 air_time_with_cut <- q %>% collect
 head(air_time_with_cut, 3)
 ```
@@ -182,7 +182,27 @@ head(air_time_with_cut, 3)
 ## 3      160    (120,190]
 ```
 
-The `case_cut()` has more arguments such as `labels` coming from `base::cut()`.
+The `cut()` in `mutate()` has more arguments such as `labels` coming from `base::cut()`.
+
+For integer break points, specially you can indicate `labels="-"`.
+
+
+```r
+q <- flights_tbl %>% 
+  select(air_time) %>%
+  mutate(air_time_cut=cut(air_time, breaks=c(0, 80, 120, 190, 900), labels="-"))
+air_time_with_cut <- q %>% collect
+head(air_time_with_cut, 3)
+```
+
+```
+## Source: local data frame [3 x 2]
+## 
+##   air_time air_time_cut
+## 1      227      191-900
+## 2      227      191-900
+## 3      160      121-190
+```
 
 ### Improved `filter()`
 
