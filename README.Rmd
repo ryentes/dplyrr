@@ -129,6 +129,8 @@ head(air_time_with_cut, 3)
 
 The `cut()` in `mutate()` has more arguments such as `labels` coming from `base::cut()`.
 
+- `cut(variable, breaks, labels, include.lowest, right, dig.lab)`
+
 For integer break points, specially you can indicate `labels="-"`.
 
 ```{r}
@@ -228,4 +230,3 @@ q$query
 ```
 
 Similary, you can use the other `moving_**()` functions.
-

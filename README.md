@@ -187,6 +187,8 @@ head(air_time_with_cut, 3)
 
 The `cut()` in `mutate()` has more arguments such as `labels` coming from `base::cut()`.
 
+- `cut(variable, breaks, labels, include.lowest, right, dig.lab)`
+
 For integer break points, specially you can indicate `labels="-"`.
 
 
@@ -283,7 +285,7 @@ temp_tbl
 
 ```
 ## Source: postgres 9.2.10 [makiyama@54.65.22.166:5432/test]
-## From: tjvvgffqeo [5 x 1]
+## From: gjbrwfkyzb [5 x 1]
 ## 
 ##   x
 ## 1 1
@@ -323,8 +325,8 @@ q$query
 ```
 ## <Query> SELECT "x", "y"
 ## FROM (SELECT "x", avg("x") OVER (ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS "y"
-## FROM "tjvvgffqeo") AS "_W1"
-## <PostgreSQLConnection:(5204,0)>
+## FROM "gjbrwfkyzb") AS "_W1"
+## <PostgreSQLConnection:(10656,0)>
 ```
 
 Compute moving mean with 1 preceding and 2 following.
@@ -357,8 +359,8 @@ q$query
 ```
 ## <Query> SELECT "x", "y"
 ## FROM (SELECT "x", avg("x") OVER (ROWS BETWEEN 1 PRECEDING AND 2 FOLLOWING) AS "y"
-## FROM "tjvvgffqeo") AS "_W2"
-## <PostgreSQLConnection:(5204,0)>
+## FROM "gjbrwfkyzb") AS "_W2"
+## <PostgreSQLConnection:(10656,0)>
 ```
 
 Similary, you can use the other `moving_**()` functions.
