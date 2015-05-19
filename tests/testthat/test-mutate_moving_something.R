@@ -59,5 +59,13 @@ if(!is.null(tbls$postgres)) {
     result <- q %>% collect
     expect_equal(result$y, c(2.0, 2.5, 3.5, 4.0, 4.5))
   })
+
+  test_that("simultaneously", {
+    q <- temp_tbl %>% 
+      mutate(y=moving_mean(x, 1), z=moving_mean(x, 2))
+    result <- q %>% collect
+    expect_equal(result$y, c(1.5, 2.0, 3.0, 4.0, 4.5))
+    expect_equal(result$z, c(2.0, 2.5, 3.0, 3.5, 4.0))
+  })
   
 }
