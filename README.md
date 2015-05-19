@@ -146,7 +146,7 @@ If you want to group the `air_time` by break points `c(0, 80, 120, 190, 900)`, y
 ```r
 q <- flights_tbl %>% 
   select(air_time) %>%
-  mutate(air_time_cut=if(air_time > 0 && air_time <= 80) "(0,80]"
+  mutate(air_time_cut = if(air_time > 0 && air_time <= 80) "(0,80]"
          else if(air_time > 80 && air_time <= 120) "(80,120]"
          else if(air_time > 120 && air_time <= 190) "(120,190]"
          else if(air_time > 190 && air_time <= 900) "(190,900]")
@@ -171,7 +171,7 @@ By using `cut()` function in `mutate()`, it can become easy.
 ```r
 q <- flights_tbl %>% 
   select(air_time) %>%
-  mutate(air_time_cut=cut(air_time, breaks=c(0, 80, 120, 190, 900)))
+  mutate(air_time_cut = cut(air_time, breaks=c(0, 80, 120, 190, 900)))
 air_time_with_cut <- q %>% collect
 head(air_time_with_cut, 3)
 ```
@@ -195,7 +195,7 @@ For integer break points, specially you can indicate `labels="-"`.
 ```r
 q <- flights_tbl %>% 
   select(air_time) %>%
-  mutate(air_time_cut=cut(air_time, breaks=c(0, 80, 120, 190, 900), labels="-"))
+  mutate(air_time_cut = cut(air_time, breaks=c(0, 80, 120, 190, 900), labels="-"))
 air_time_with_cut <- q %>% collect
 head(air_time_with_cut, 3)
 ```
@@ -278,14 +278,14 @@ For illustration, we use the test database that is PostgreSQL.
 ```r
 srcs <- temp_srcs("postgres")
 df <- data.frame(x = 1:5)
-tbls <- dplyr:::temp_load(srcs, list(df=df))
+tbls <- dplyr:::temp_load(srcs, list(df = df))
 temp_tbl <- tbls$postgres$df
 temp_tbl
 ```
 
 ```
 ## Source: postgres 9.2.10 [makiyama@54.65.22.166:5432/test]
-## From: gjbrwfkyzb [5 x 1]
+## From: sfgoifnfpe [5 x 1]
 ## 
 ##   x
 ## 1 1
@@ -325,8 +325,8 @@ q$query
 ```
 ## <Query> SELECT "x", "y"
 ## FROM (SELECT "x", avg("x") OVER (ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS "y"
-## FROM "gjbrwfkyzb") AS "_W1"
-## <PostgreSQLConnection:(10656,0)>
+## FROM "sfgoifnfpe") AS "_W1"
+## <PostgreSQLConnection:(10496,0)>
 ```
 
 Compute moving mean with 1 preceding and 2 following.
@@ -359,9 +359,8 @@ q$query
 ```
 ## <Query> SELECT "x", "y"
 ## FROM (SELECT "x", avg("x") OVER (ROWS BETWEEN 1 PRECEDING AND 2 FOLLOWING) AS "y"
-## FROM "gjbrwfkyzb") AS "_W2"
-## <PostgreSQLConnection:(10656,0)>
+## FROM "sfgoifnfpe") AS "_W2"
+## <PostgreSQLConnection:(10496,0)>
 ```
 
 Similary, you can use the other `moving_**()` functions.
-
