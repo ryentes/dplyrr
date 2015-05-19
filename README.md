@@ -16,7 +16,10 @@ For that purpose, I've created `dplyrr` package.
 - `load_tbls()` : Easy to load table objects for all tables in a database.
 - `cut()` in `mutate()` : Easy to create a case statement by using the grammar like the `base::cut()`.
 - `filter()` : Improved `filter()` for `tbl_sql` which adds parentheses appropriately.
-- `moving_average()` : Compute moving average for PostgreSQL.
+- `moving_mean()` in `mutate()` : Compute moving average for PostgreSQL.
+- `moving_max()` in `mutate()` : Compute moving max for PostgreSQL.
+- `moving_min()` in `mutate()` : Compute moving min for PostgreSQL.
+- `moving_sum()` in `mutate()` : Compute moving sum for PostgreSQL.
 
 `dplyrr` is going to have below functions:
 
@@ -256,36 +259,107 @@ q$query
 
 ## Functions for PostgreSQL
 
-### `moving_average()`
+### `moving_**()`
+
+`dplyrr` has four `moving_**()` functions that can use in `mutate()`.
+
+- `moving_mean(variable, preceding, following)`
+- `moving_max(variable, preceding, following)`
+- `moving_min(variable, preceding, following)`
+- `moving_sum(variable, preceding, following)`
+
+When you want to set the same `preceding` and `following`, you can omit `following`.
+
+For illustration, we use the test database that is PostgreSQL.
 
 
 ```r
-db <- src_postgres()
-account_tbl <- tbl(db, "account")
-q <- account_tbl %>% 
-  filter(between(register_datetime, "2010-09-01", "2010-10-01")) %>%
-  count(date=date_trunc("days", register_datetime)) %>%
-  rename(account_num=n) %>%
-  arrange(date) %>%
-  moving_average(moving_average_3days=account_num(1), moving_average_5days=account_num(2))
-data <- q %>% collect
-data
+srcs <- temp_srcs("postgres")
+df <- data.frame(x = 1:5)
+tbls <- dplyr:::temp_load(srcs, list(df=df))
+temp_tbl <- tbls$postgres$df
+temp_tbl
 ```
 
 ```
-## Source: local data frame [30 x 4]
+## Source: postgres 9.2.10 [makiyama@54.65.22.166:5432/test]
+## From: tjvvgffqeo [5 x 1]
 ## 
-##          date account_num moving_average_3days moving_average_5days
-## 1  2010-09-01          56                71.50                73.67
-## 2  2010-09-02          87                73.67                63.00
-## 3  2010-09-03          78                65.33                59.80
-## 4  2010-09-04          31                52.00                65.60
-## 5  2010-09-05          47                54.33                79.20
-## 6  2010-09-06          85                95.67                78.40
-## 7  2010-09-07         155               104.67                89.00
-## 8  2010-09-08          74               104.33               116.00
-## 9  2010-09-09          84               113.33               117.40
-## 10 2010-09-10         182               119.33                99.00
-## ..        ...         ...                  ...                  ...
+##   x
+## 1 1
+## 2 2
+## 3 3
+## 4 4
+## 5 5
 ```
+
+Compute moving mean with 1 preceding and 1 following.
+
+
+```r
+q <- temp_tbl %>%
+  mutate(y = moving_mean(x, 1))
+q %>% collect
+```
+
+```
+## Source: local data frame [5 x 2]
+## 
+##   x   y
+## 1 1 1.5
+## 2 2 2.0
+## 3 3 3.0
+## 4 4 4.0
+## 5 5 4.5
+```
+
+Comfirm query.
+
+
+```r
+q$query
+```
+
+```
+## <Query> SELECT "x", "y"
+## FROM (SELECT "x", avg("x") OVER (ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS "y"
+## FROM "tjvvgffqeo") AS "_W1"
+## <PostgreSQLConnection:(5204,0)>
+```
+
+Compute moving mean with 1 preceding and 2 following.
+
+
+```r
+q <- temp_tbl %>%
+  mutate(y = moving_mean(x, 1, 2))
+q %>% collect
+```
+
+```
+## Source: local data frame [5 x 2]
+## 
+##   x   y
+## 1 1 2.0
+## 2 2 2.5
+## 3 3 3.5
+## 4 4 4.0
+## 5 5 4.5
+```
+
+Comfirm query.
+
+
+```r
+q$query
+```
+
+```
+## <Query> SELECT "x", "y"
+## FROM (SELECT "x", avg("x") OVER (ROWS BETWEEN 1 PRECEDING AND 2 FOLLOWING) AS "y"
+## FROM "tjvvgffqeo") AS "_W2"
+## <PostgreSQLConnection:(5204,0)>
+```
+
+Similary, you can use the other `moving_**()` functions.
 

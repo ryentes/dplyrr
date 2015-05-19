@@ -23,7 +23,10 @@ For that purpose, I've created `dplyrr` package.
 - `load_tbls()` : Easy to load table objects for all tables in a database.
 - `cut()` in `mutate()` : Easy to create a case statement by using the grammar like the `base::cut()`.
 - `filter()` : Improved `filter()` for `tbl_sql` which adds parentheses appropriately.
-- `moving_average()` : Compute moving average for PostgreSQL.
+- `moving_mean()` in `mutate()` : Compute moving average for PostgreSQL.
+- `moving_max()` in `mutate()` : Compute moving max for PostgreSQL.
+- `moving_min()` in `mutate()` : Compute moving min for PostgreSQL.
+- `moving_sum()` in `mutate()` : Compute moving sum for PostgreSQL.
 
 `dplyrr` is going to have below functions:
 
@@ -175,18 +178,54 @@ q$query
 
 ## Functions for PostgreSQL
 
-### `moving_average()`
+### `moving_**()`
+
+`dplyrr` has four `moving_**()` functions that can use in `mutate()`.
+
+- `moving_mean(variable, preceding, following)`
+- `moving_max(variable, preceding, following)`
+- `moving_min(variable, preceding, following)`
+- `moving_sum(variable, preceding, following)`
+
+When you want to set the same `preceding` and `following`, you can omit `following`.
+
+For illustration, we use the test database that is PostgreSQL.
 
 ```{r}
-db <- src_postgres()
-account_tbl <- tbl(db, "account")
-q <- account_tbl %>% 
-  filter(between(register_datetime, "2010-09-01", "2010-10-01")) %>%
-  count(date=date_trunc("days", register_datetime)) %>%
-  rename(account_num=n) %>%
-  arrange(date) %>%
-  moving_average(moving_average_3days=account_num(1), moving_average_5days=account_num(2))
-data <- q %>% collect
-data
+srcs <- temp_srcs("postgres")
+df <- data.frame(x = 1:5)
+tbls <- dplyr:::temp_load(srcs, list(df=df))
+temp_tbl <- tbls$postgres$df
+temp_tbl
 ```
+
+Compute moving mean with 1 preceding and 1 following.
+
+```{r}
+q <- temp_tbl %>%
+  mutate(y = moving_mean(x, 1))
+q %>% collect
+```
+
+Comfirm query.
+
+```{r}
+q$query
+```
+
+Compute moving mean with 1 preceding and 2 following.
+
+```{r}
+q <- temp_tbl %>%
+  mutate(y = moving_mean(x, 1, 2))
+q %>% collect
+```
+
+Comfirm query.
+
+```{r}
+q$query
+```
+
+Similary, you can use the other `moving_**()` functions.
 
