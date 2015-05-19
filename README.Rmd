@@ -180,7 +180,7 @@ q$query
 
 ## Functions for PostgreSQL
 
-### `moving_**()`
+### `moving_**()` in `mutate()`
 
 `dplyrr` has four `moving_**()` functions that can use in `mutate()`.
 
@@ -198,10 +198,10 @@ srcs <- temp_srcs("postgres")
 df <- data.frame(x = 1:5)
 tbls <- dplyr:::temp_load(srcs, list(df = df))
 temp_tbl <- tbls$postgres$df
-temp_tbl
+head(temp_tbl)
 ```
 
-Compute moving mean with 1 preceding and 1 following.
+Compute moving average with 1 preceding and 1 following.
 
 ```{r}
 q <- temp_tbl %>%
@@ -230,3 +230,66 @@ q$query
 ```
 
 Similary, you can use the other `moving_**()` functions.
+
+### `first_value()` in `mutate()`
+
+`dplyrr` has `first_value()` function that can use in `mutate()`.
+
+- `first_value(value, order_by)`
+
+When you want to set the same `value` and `order_by`, you can omit `order_by`.
+
+For illustration, we use the test database that is PostgreSQL.
+
+```{r}
+srcs <- temp_srcs("postgres")
+df <- data.frame(class = c("A", "A", "B", "B", "C", "C"), x = 1:6, y = 6:1)
+tbls <- dplyr:::temp_load(srcs, list(df=df))
+temp_tbl <- tbls$postgres$df
+head(temp_tbl)
+```
+
+Get the first values of x partitioned by class and ordered by x.
+
+```{r}
+q <- temp_tbl %>%
+  group_by(class) %>%
+  mutate(z = first_value(x))
+q %>% collect
+```
+
+See query.
+
+```{r}
+q$query
+```
+
+Get the first values of x partitioned by class and ordered by y.
+
+```{r}
+q <- temp_tbl %>%
+  group_by(class) %>%
+  mutate(z = first_value(x, y))
+q %>% collect
+```
+
+See query.
+
+```{r}
+q$query
+```
+
+Get the first values of x partitioned by class and ordered by descent of y.
+
+```{r}
+q <- temp_tbl %>%
+  group_by(class) %>%
+  mutate(z = first_value(x, desc(y)))
+q %>% collect
+```
+
+See query.
+
+```{r}
+q$query
+```

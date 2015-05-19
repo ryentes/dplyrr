@@ -261,7 +261,7 @@ q$query
 
 ## Functions for PostgreSQL
 
-### `moving_**()`
+### `moving_**()` in `mutate()`
 
 `dplyrr` has four `moving_**()` functions that can use in `mutate()`.
 
@@ -280,13 +280,10 @@ srcs <- temp_srcs("postgres")
 df <- data.frame(x = 1:5)
 tbls <- dplyr:::temp_load(srcs, list(df = df))
 temp_tbl <- tbls$postgres$df
-temp_tbl
+head(temp_tbl)
 ```
 
 ```
-## Source: postgres 9.2.10 [makiyama@54.65.22.166:5432/test]
-## From: sfgoifnfpe [5 x 1]
-## 
 ##   x
 ## 1 1
 ## 2 2
@@ -295,7 +292,7 @@ temp_tbl
 ## 5 5
 ```
 
-Compute moving mean with 1 preceding and 1 following.
+Compute moving average with 1 preceding and 1 following.
 
 
 ```r
@@ -325,8 +322,8 @@ q$query
 ```
 ## <Query> SELECT "x", "y"
 ## FROM (SELECT "x", avg("x") OVER (ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS "y"
-## FROM "sfgoifnfpe") AS "_W1"
-## <PostgreSQLConnection:(10496,0)>
+## FROM "iubfgrqibp") AS "_W1"
+## <PostgreSQLConnection:(9528,0)>
 ```
 
 Compute moving mean with 1 preceding and 2 following.
@@ -359,8 +356,148 @@ q$query
 ```
 ## <Query> SELECT "x", "y"
 ## FROM (SELECT "x", avg("x") OVER (ROWS BETWEEN 1 PRECEDING AND 2 FOLLOWING) AS "y"
-## FROM "sfgoifnfpe") AS "_W2"
-## <PostgreSQLConnection:(10496,0)>
+## FROM "iubfgrqibp") AS "_W2"
+## <PostgreSQLConnection:(9528,0)>
 ```
 
 Similary, you can use the other `moving_**()` functions.
+
+### `first_value()` in `mutate()`
+
+`dplyrr` has `first_value()` function that can use in `mutate()`.
+
+- `first_value(value, order_by)`
+
+When you want to set the same `value` and `order_by`, you can omit `order_by`.
+
+For illustration, we use the test database that is PostgreSQL.
+
+
+```r
+srcs <- temp_srcs("postgres")
+df <- data.frame(class = c("A", "A", "B", "B", "C", "C"), x = 1:6, y = 6:1)
+tbls <- dplyr:::temp_load(srcs, list(df=df))
+temp_tbl <- tbls$postgres$df
+head(temp_tbl)
+```
+
+```
+##   class x y
+## 1     A 1 6
+## 2     A 2 5
+## 3     B 3 4
+## 4     B 4 3
+## 5     C 5 2
+## 6     C 6 1
+```
+
+Get the first values of x partitioned by class and ordered by x.
+
+
+```r
+q <- temp_tbl %>%
+  group_by(class) %>%
+  mutate(z = first_value(x))
+q %>% collect
+```
+
+```
+## Source: local data frame [6 x 4]
+## Groups: class
+## 
+##   class x y z
+## 1     A 1 6 1
+## 2     A 2 5 1
+## 3     B 3 4 3
+## 4     B 4 3 3
+## 5     C 5 2 5
+## 6     C 6 1 5
+```
+
+See query.
+
+
+```r
+q$query
+```
+
+```
+## <Query> SELECT "class", "x", "y", "z"
+## FROM (SELECT "class", "x", "y", first_value("x") OVER (PARTITION BY "class" ORDER BY "x") AS "z"
+## FROM "gbirxfvoei") AS "_W3"
+## <PostgreSQLConnection:(9528,0)>
+```
+
+Get the first values of x partitioned by class and ordered by y.
+
+
+```r
+q <- temp_tbl %>%
+  group_by(class) %>%
+  mutate(z = first_value(x, y))
+q %>% collect
+```
+
+```
+## Source: local data frame [6 x 4]
+## Groups: class
+## 
+##   class x y z
+## 1     A 2 5 2
+## 2     A 1 6 2
+## 3     B 4 3 4
+## 4     B 3 4 4
+## 5     C 6 1 6
+## 6     C 5 2 6
+```
+
+See query.
+
+
+```r
+q$query
+```
+
+```
+## <Query> SELECT "class", "x", "y", "z"
+## FROM (SELECT "class", "x", "y", first_value("x") OVER (PARTITION BY "class" ORDER BY "y") AS "z"
+## FROM "gbirxfvoei") AS "_W4"
+## <PostgreSQLConnection:(9528,0)>
+```
+
+Get the first values of x partitioned by class and ordered by descent of y.
+
+
+```r
+q <- temp_tbl %>%
+  group_by(class) %>%
+  mutate(z = first_value(x, desc(y)))
+q %>% collect
+```
+
+```
+## Source: local data frame [6 x 4]
+## Groups: class
+## 
+##   class x y z
+## 1     A 1 6 1
+## 2     A 2 5 1
+## 3     B 3 4 3
+## 4     B 4 3 3
+## 5     C 5 2 5
+## 6     C 6 1 5
+```
+
+See query.
+
+
+```r
+q$query
+```
+
+```
+## <Query> SELECT "class", "x", "y", "z"
+## FROM (SELECT "class", "x", "y", first_value("x") OVER (PARTITION BY "class" ORDER BY "y" DESC) AS "z"
+## FROM "gbirxfvoei") AS "_W5"
+## <PostgreSQLConnection:(9528,0)>
+```
