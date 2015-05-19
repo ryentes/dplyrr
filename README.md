@@ -20,10 +20,7 @@ For that purpose, I've created `dplyrr` package.
 - `moving_max()` in `mutate()` : Compute moving max for PostgreSQL.
 - `moving_min()` in `mutate()` : Compute moving min for PostgreSQL.
 - `moving_sum()` in `mutate()` : Compute moving sum for PostgreSQL.
-
-`dplyrr` is going to have below functions:
-
-- Compute `first_value` for PostgreSQL.
+- `first_value()` in `mutate()` : Compute first value for PostgreSQL.
 
 ## How to install
 
@@ -322,8 +319,8 @@ q$query
 ```
 ## <Query> SELECT "x", "y"
 ## FROM (SELECT "x", avg("x") OVER (ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS "y"
-## FROM "iubfgrqibp") AS "_W1"
-## <PostgreSQLConnection:(9528,0)>
+## FROM "ypcvfqenef") AS "_W1"
+## <PostgreSQLConnection:(11124,0)>
 ```
 
 Compute moving mean with 1 preceding and 2 following.
@@ -356,8 +353,8 @@ q$query
 ```
 ## <Query> SELECT "x", "y"
 ## FROM (SELECT "x", avg("x") OVER (ROWS BETWEEN 1 PRECEDING AND 2 FOLLOWING) AS "y"
-## FROM "iubfgrqibp") AS "_W2"
-## <PostgreSQLConnection:(9528,0)>
+## FROM "ypcvfqenef") AS "_W2"
+## <PostgreSQLConnection:(11124,0)>
 ```
 
 Similary, you can use the other `moving_**()` functions.
@@ -424,8 +421,8 @@ q$query
 ```
 ## <Query> SELECT "class", "x", "y", "z"
 ## FROM (SELECT "class", "x", "y", first_value("x") OVER (PARTITION BY "class" ORDER BY "x") AS "z"
-## FROM "gbirxfvoei") AS "_W3"
-## <PostgreSQLConnection:(9528,0)>
+## FROM "beqbnstnij") AS "_W3"
+## <PostgreSQLConnection:(11124,0)>
 ```
 
 Get the first values of x partitioned by class and ordered by y.
@@ -461,8 +458,8 @@ q$query
 ```
 ## <Query> SELECT "class", "x", "y", "z"
 ## FROM (SELECT "class", "x", "y", first_value("x") OVER (PARTITION BY "class" ORDER BY "y") AS "z"
-## FROM "gbirxfvoei") AS "_W4"
-## <PostgreSQLConnection:(9528,0)>
+## FROM "beqbnstnij") AS "_W4"
+## <PostgreSQLConnection:(11124,0)>
 ```
 
 Get the first values of x partitioned by class and ordered by descent of y.
@@ -498,6 +495,6 @@ q$query
 ```
 ## <Query> SELECT "class", "x", "y", "z"
 ## FROM (SELECT "class", "x", "y", first_value("x") OVER (PARTITION BY "class" ORDER BY "y" DESC) AS "z"
-## FROM "gbirxfvoei") AS "_W5"
-## <PostgreSQLConnection:(9528,0)>
+## FROM "beqbnstnij") AS "_W5"
+## <PostgreSQLConnection:(11124,0)>
 ```

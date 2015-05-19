@@ -27,10 +27,7 @@ For that purpose, I've created `dplyrr` package.
 - `moving_max()` in `mutate()` : Compute moving max for PostgreSQL.
 - `moving_min()` in `mutate()` : Compute moving min for PostgreSQL.
 - `moving_sum()` in `mutate()` : Compute moving sum for PostgreSQL.
-
-`dplyrr` is going to have below functions:
-
-- Compute `first_value` for PostgreSQL.
+- `first_value()` in `mutate()` : Compute first value for PostgreSQL.
 
 ## How to install
 
