@@ -3,7 +3,7 @@
 mutate_.tbl_sql <- function(.data, ..., .dots) {
   dots <- lazyeval::all_dots(.dots, ..., all_named = TRUE)
   ### begin added area ###
-  original_functions <- c("cut", "moving_mean", "moving_max", "moving_min", "moving_sum", "first_value")
+  original_functions <- c("cut", "moving_mean", "moving_max", "moving_min", "moving_sum", "first_value", "n_if", "count_if")
   infos <- Map(function(d) {
     function_name <- as.character(d$expr)[1]
     is_original <- function_name %in% original_functions
@@ -17,6 +17,8 @@ mutate_.tbl_sql <- function(.data, ..., .dots) {
                   moving_min=mutate_moving_something("min", d),
                   moving_sum=mutate_moving_something("sum", d),
                   first_value=mutate_first_value(d),
+                  count_if=mutate_count_if(d),
+                  n_if=mutate_count_if(d),
                   default=stop(sprintf("%s is not found in the original functions", function_name))
       )
       if(function_name %in% c("moving_mean", "moving_max", "moving_min", "moving_sum")) {
