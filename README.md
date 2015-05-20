@@ -25,7 +25,7 @@ For that purpose, I've created `dplyrr` package.
 
 ## 2. How to install
 
-The source code for `dplyrr` package is now available on GitHub at
+The source code for `dplyrr` package is available on GitHub at
 
 - https://github.com/hoxo-m/dplyrr.  
 
@@ -120,7 +120,7 @@ glimpse(airlines_tbl)
 ## $ name    (chr) "Endeavor Air Inc.", "American Airlines Inc.", "Alaska...
 ```
 
-### `cut()` in `mutate()`
+### 3-2. `cut()` in `mutate()`
 
 If you want to write case statement with like `base::cut()`, you can use `cut()` function in `mutate()`.
 
@@ -213,7 +213,7 @@ head(air_time_with_cut, 3)
 ## 3      160      121-190
 ```
 
-### 3-2. `count_if()` or `n_if()` in `summarise()`
+### 3-3. `count_if()` or `n_if()` in `summarise()`
 
 When we want to count rows that a condition is satisfied, we write like this.
 
@@ -258,7 +258,7 @@ q %>% collect
 
 Both functions do exactly the same thing.
 
-### 3-3. Improved `filter()`
+### 3-4. Improved `filter()`
 
 
 
