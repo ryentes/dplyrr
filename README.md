@@ -15,7 +15,7 @@ For that purpose, I've created `dplyrr` package.
 
 - `load_tbls()` : Easy to load table objects for all tables in a database.
 - `cut()` in `mutate()` : Easy to create a case statement by using the grammar like the `base::cut()`.
-- `count_if` or `n_if()` in `summarise()` : Shortcut to count rows that a condition is satisfied.
+- `count_if()` and `n_if()` in `summarise()` : Shortcut to count rows that a condition is satisfied.
 - `filter()` : Improved `filter()` for `tbl_sql` which adds parentheses appropriately.
 - `moving_mean()` in `mutate()` : Compute moving average for PostgreSQL.
 - `moving_max()` in `mutate()` : Compute moving max for PostgreSQL.
@@ -213,7 +213,7 @@ head(air_time_with_cut, 3)
 ## 3      160      121-190
 ```
 
-### 3-3. `count_if()` or `n_if()` in `summarise()`
+### 3-3. `count_if()` and `n_if()` in `summarise()`
 
 When we want to count rows that a condition is satisfied, we write like this.
 
