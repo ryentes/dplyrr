@@ -1,11 +1,11 @@
 Package: dplyrr
 Type: Package
-Title: Tools for improvement of experience on dplyr with the databases
-Version: 0.0.9
-Date: 2015-05-19
+Title: Utilities for comfortable use of dplyr with databases
+Version: 0.1.0
+Date: 2015-05-20
 Author: Koji MAKIYAMA(@hoxo_m)
 Maintainer: Koji MAKIYAMA <hoxo.smile@gmail.com>
-Description: Tools for improvement of experience on dplyr with the databases
+Description: Utilities for comfortable use of dplyr with databases
 License: MIT
 Suggests:
     testthat,

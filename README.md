@@ -1,9 +1,9 @@
-# dplyrr - Tools for improvement of experience on dplyr with databases
+# dplyrr - Utilities for comfortable use of dplyr with databases
 Koji MAKIYAMA  
 
 
 
-## Overview
+## 1. Overview
 
 `dplyr` is the most powerful package for data handling in R, and it has also the ability of working with databases([See Vignette](http://cran.rstudio.com/web/packages/dplyr/vignettes/databases.html)).  
 But the functionalities of dealing with databases in `dplyr` is developing yet.
@@ -23,7 +23,13 @@ For that purpose, I've created `dplyrr` package.
 - `moving_sum()` in `mutate()` : Compute moving sum for PostgreSQL.
 - `first_value()` in `mutate()` : Compute first value for PostgreSQL.
 
-## How to install
+## 2. How to install
+
+The source code for `dplyrr` package is now available on GitHub at
+
+- https://github.com/hoxo-m/dplyrr.  
+
+You can install the pakage from there.
 
 
 ```r
@@ -31,7 +37,7 @@ install.packages("devtools") # if you have not installed "devtools" package
 devtools::install_github("hoxo-m/dplyrr")
 ```
 
-## Common functions for all databases
+## 3. Common functions for all databases
 
 For illustration, we use a database file: "my_db.sqlite3".  
 If you want to trace the codes below, you should first create the databese file.
@@ -45,7 +51,7 @@ db <- src_sqlite("my_db.sqlite3", create = TRUE)
 copy_nycflights13(db)
 ```
 
-### `load_tbls()`
+### 3-1. `load_tbls()`
 
 Usually, when we use a database with `dplyr`, we first create database object, and we can see the tables in the databese by `show()`.
 
@@ -207,7 +213,7 @@ head(air_time_with_cut, 3)
 ## 3      160      121-190
 ```
 
-### `count_if()` or `n_if()` in `summarise()`
+### 3-2. `count_if()` or `n_if()` in `summarise()`
 
 When we want to count rows that a condition is satisfied, we write like this.
 
@@ -252,7 +258,7 @@ q %>% collect
 
 Both functions do exactly the same thing.
 
-### Improved `filter()`
+### 3-3. Improved `filter()`
 
 
 
@@ -302,11 +308,11 @@ q$query
 ## <SQLiteConnection>
 ```
 
-## Functions for PostgreSQL
+## 4. Functions for PostgreSQL
 
 
 
-### `moving_**()` in `mutate()`
+### 4-1. `moving_**()` in `mutate()`
 
 `dplyrr` has four `moving_**()` functions that can use in `mutate()`.
 
@@ -407,7 +413,7 @@ q$query
 
 Similary, you can use the other `moving_**()` functions.
 
-### `first_value()` in `mutate()`
+### 4-2. `first_value()` in `mutate()`
 
 `dplyrr` has `first_value()` function that can use in `mutate()`.
 
@@ -547,7 +553,7 @@ q$query
 ## <PostgreSQLConnection:(10316,0)>
 ```
 
-## Miscellaneous
+## 5. Miscellaneous
 
 ### `update_dplyrr()`
 
