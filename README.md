@@ -546,3 +546,24 @@ q$query
 ## FROM "slrhxfdvrt") AS "_W5"
 ## <PostgreSQLConnection:(10316,0)>
 ```
+
+## Miscellaneous
+
+### `update_dplyrr()`
+
+`update_dplyrr()` is a shortcut of 
+
+
+```r
+devtools::install_github("hoxo-m/dplyrr")
+```
+
+### `unload_dplyrr()`
+
+`unload_dplyrr()` is a shortcut of 
+
+
+```r
+detach("package:dplyrr", unload = TRUE)
+detach("package:dplyr", unload = TRUE)
+```
