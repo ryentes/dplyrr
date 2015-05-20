@@ -15,6 +15,7 @@ For that purpose, I've created `dplyrr` package.
 
 - `load_tbls()` : Easy to load table objects for all tables in a database.
 - `cut()` in `mutate()` : Easy to create a case statement by using the grammar like the `base::cut()`.
+- `count_if` or `n_if()` in `summarise()` : Shortcut to count rows that a condition is satisfied.
 - `filter()` : Improved `filter()` for `tbl_sql` which adds parentheses appropriately.
 - `moving_mean()` in `mutate()` : Compute moving average for PostgreSQL.
 - `moving_max()` in `mutate()` : Compute moving max for PostgreSQL.
@@ -206,6 +207,51 @@ head(air_time_with_cut, 3)
 ## 3      160      121-190
 ```
 
+### `count_if()` or `n_if()` in `summarise()`
+
+When we want to count rows that a condition is satisfied, we write like this.
+
+
+```r
+q <- flights_tbl %>% 
+  select(air_time) %>%
+  summarise(odd_airtime_rows = sum(if(air_time %% 2 == 1) 1L else 0L), 
+            even_airtime_rows = sum(if(air_time %% 2 == 0) 1L else 0L), 
+            total_rows=n())
+q %>% collect
+```
+
+```
+## Source: local data frame [1 x 3]
+## 
+##   odd_airtime_rows even_airtime_rows total_rows
+## 1           164150            163196     336776
+```
+
+The `count_if()` and `n_if()` functions are a shortcut for it merely.
+
+- `count_if(condition)`
+- `n_if(condition)`
+
+
+```r
+q <- flights_tbl %>% 
+  select(air_time) %>%
+  summarise(odd_airtime_rows = count_if(air_time %% 2 == 1), 
+            even_airtime_rows = n_if(air_time %% 2 == 0), 
+            total_rows=n())
+q %>% collect
+```
+
+```
+## Source: local data frame [1 x 3]
+## 
+##   odd_airtime_rows even_airtime_rows total_rows
+## 1           164150            163196     336776
+```
+
+Both functions do exactly the same thing.
+
 ### Improved `filter()`
 
 
@@ -257,6 +303,8 @@ q$query
 ```
 
 ## Functions for PostgreSQL
+
+
 
 ### `moving_**()` in `mutate()`
 
@@ -319,8 +367,8 @@ q$query
 ```
 ## <Query> SELECT "x", "y"
 ## FROM (SELECT "x", avg("x") OVER (ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) AS "y"
-## FROM "ypcvfqenef") AS "_W1"
-## <PostgreSQLConnection:(11124,0)>
+## FROM "tlsqbjsuou") AS "_W1"
+## <PostgreSQLConnection:(10316,0)>
 ```
 
 Compute moving mean with 1 preceding and 2 following.
@@ -353,8 +401,8 @@ q$query
 ```
 ## <Query> SELECT "x", "y"
 ## FROM (SELECT "x", avg("x") OVER (ROWS BETWEEN 1 PRECEDING AND 2 FOLLOWING) AS "y"
-## FROM "ypcvfqenef") AS "_W2"
-## <PostgreSQLConnection:(11124,0)>
+## FROM "tlsqbjsuou") AS "_W2"
+## <PostgreSQLConnection:(10316,0)>
 ```
 
 Similary, you can use the other `moving_**()` functions.
@@ -421,8 +469,8 @@ q$query
 ```
 ## <Query> SELECT "class", "x", "y", "z"
 ## FROM (SELECT "class", "x", "y", first_value("x") OVER (PARTITION BY "class" ORDER BY "x") AS "z"
-## FROM "beqbnstnij") AS "_W3"
-## <PostgreSQLConnection:(11124,0)>
+## FROM "slrhxfdvrt") AS "_W3"
+## <PostgreSQLConnection:(10316,0)>
 ```
 
 Get the first values of x partitioned by class and ordered by y.
@@ -458,8 +506,8 @@ q$query
 ```
 ## <Query> SELECT "class", "x", "y", "z"
 ## FROM (SELECT "class", "x", "y", first_value("x") OVER (PARTITION BY "class" ORDER BY "y") AS "z"
-## FROM "beqbnstnij") AS "_W4"
-## <PostgreSQLConnection:(11124,0)>
+## FROM "slrhxfdvrt") AS "_W4"
+## <PostgreSQLConnection:(10316,0)>
 ```
 
 Get the first values of x partitioned by class and ordered by descent of y.
@@ -495,6 +543,6 @@ q$query
 ```
 ## <Query> SELECT "class", "x", "y", "z"
 ## FROM (SELECT "class", "x", "y", first_value("x") OVER (PARTITION BY "class" ORDER BY "y" DESC) AS "z"
-## FROM "beqbnstnij") AS "_W5"
-## <PostgreSQLConnection:(11124,0)>
+## FROM "slrhxfdvrt") AS "_W5"
+## <PostgreSQLConnection:(10316,0)>
 ```
