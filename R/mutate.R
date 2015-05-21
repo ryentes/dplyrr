@@ -1,5 +1,10 @@
 #' dplyr mutate() added original functions for databases
 #'
+#' @param .data A tbl_sql.
+#' @param ... Name-value pairs of expressions. Use NULL to drop a variable.
+#' @param .dots Used to work around non-standard evaluation.
+#' @return An object of tbl_sql.
+#' 
 mutate_.tbl_sql <- function(.data, ..., .dots) {
   dots <- lazyeval::all_dots(.dots, ..., all_named = TRUE)
   ### begin added area ###

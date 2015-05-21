@@ -7,6 +7,8 @@
 mutate_moving_something(type = c("mean", "max", "min", "sum"), d)
 }
 \arguments{
+\item{type}{mean, max, min or sum}
+
 \item{d}{a lazy before the translation}
 }
 \value{

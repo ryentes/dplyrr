@@ -13,7 +13,8 @@ mutate_first_value <- function(d) {
 
 #' extract first_value() arguments
 #'
-#' @param d a lazy
+#' @param dot a lazy befere the translation
+#' @param d a lazy after the translation
 #' @return a lazy with arguments
 #'
 extract_first_value_info <- function(dot, d) {

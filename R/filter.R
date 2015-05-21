@@ -1,5 +1,10 @@
 #' Improved filter for tbl_sql which adds parentheses
 #'
+#' @param .data A tbl_sql.
+#' @param ... Logical predicates. Multiple conditions are combined with &.
+#' @param .dots Used to work around non-standard evaluation.
+#' @return An object of tbl_sql.
+#' 
 filter_.tbl_sql <- function(.data, ..., .dots) {
   dots <- lazyeval::all_dots(.dots, ...)
   dots <- Map(function(dot) {

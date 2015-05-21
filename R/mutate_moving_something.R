@@ -1,5 +1,6 @@
 #' translater for moving_**() added to mutate()
 #' 
+#' @param type mean, max, min or sum
 #' @param d a lazy before the translation
 #' @return a lazy after the translation
 #'

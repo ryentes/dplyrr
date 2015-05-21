@@ -6,6 +6,16 @@
 \usage{
 \method{filter_}{tbl_sql}(.data, ..., .dots)
 }
+\arguments{
+\item{.data}{A tbl_sql.}
+
+\item{...}{Logical predicates. Multiple conditions are combined with &.}
+
+\item{.dots}{Used to work around non-standard evaluation.}
+}
+\value{
+An object of tbl_sql.
+}
 \description{
 Improved filter for tbl_sql which adds parentheses
 }

@@ -7,7 +7,9 @@
 extract_first_value_info(dot, d)
 }
 \arguments{
-\item{d}{a lazy}
+\item{dot}{a lazy befere the translation}
+
+\item{d}{a lazy after the translation}
 }
 \value{
 a lazy with arguments

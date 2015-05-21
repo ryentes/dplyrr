@@ -6,6 +6,16 @@
 \usage{
 \method{mutate_}{tbl_sql}(.data, ..., .dots)
 }
+\arguments{
+\item{.data}{A tbl_sql.}
+
+\item{...}{Name-value pairs of expressions. Use NULL to drop a variable.}
+
+\item{.dots}{Used to work around non-standard evaluation.}
+}
+\value{
+An object of tbl_sql.
+}
 \description{
 dplyr mutate() added original functions for databases
 }
