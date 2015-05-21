@@ -18,17 +18,17 @@ mutate_cut <- function(d) {
     higher.op <- "<"
   }
   args$x <- deparse(args$x)
-  args$breaks <- eval(args$breaks, env = d$env)
-  args$include.lowest <- eval(args$include.lowest, env = d$env)
-  args$right <- eval(args$right, env = d$env)
-  args$dig.lab <- eval(args$dig.lab, env = d$env)
+  args$breaks <- eval(args$breaks, envir = d$env)
+  args$include.lowest <- eval(args$include.lowest, envir = d$env)
+  args$right <- eval(args$right, envir = d$env)
+  args$dig.lab <- eval(args$dig.lab, envir = d$env)
   if(is.null(args$labels)) {
     args$labels <- with(args, {
       levels(cut(0, breaks = breaks, include.lowest = include.lowest, 
                  right = right, dig.lab = dig.lab))
     })
   } else {
-    args$labels <- eval(args$labels, env = d$env)
+    args$labels <- eval(args$labels, envir = d$env)
   }
   if(length(args$labels) == 1 && is.character(args$labels)) {
     args$labels <- generate_range_labels(args$breaks, 
