@@ -8,7 +8,7 @@
 filter_.tbl_sql <- function(.data, ..., .dots) {
   dots <- lazyeval::all_dots(.dots, ...)
   dots <- Map(function(dot) {
-    expr <- sprintf("(%s)", deparse(dot$expr))
+    expr <- sprintf("(%s)", paste0(deparse(dot$expr), collapse = ""))
     env <- dot$env
     lazyeval::as.lazy(expr, env = env)
   }, dots)
