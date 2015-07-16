@@ -29,7 +29,7 @@ load_tbls <- function(db,
     tbl_name <- tbl_names[i]
     tbl_obj_name <- tbl_obj_names[i]
     load_tbl <- function() {
-      if(DBI::dbExistsTable(db$con, tbl_name)) {
+      if(nchar(tbl_name) != 10 || DBI::dbExistsTable(db$con, tbl_name)) {
         assign(tbl_obj_name, dplyr::tbl(db, tbl_name), envir = envir)
         if(verbose) message(paste(sprintf("Loading: %s", tbl_obj_name)))
       }
