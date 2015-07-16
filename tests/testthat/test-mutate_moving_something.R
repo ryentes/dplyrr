@@ -2,8 +2,10 @@ context("mutate_moving_something")
 
 srcs <- temp_srcs("postgres")
 df <- data.frame(x = 1:5)
-tbls <- dplyr:::temp_load(srcs, list(df=df))
+df2 <- data.frame(group=LETTERS, value=1:(26*3))
+tbls <- dplyr:::temp_load(srcs, list(df=df, df2=df2))
 temp_tbl <- tbls$postgres$df
+temp_tbl2 <- tbls$postgres$df2
 
 if(!is.null(tbls$postgres)) {
   
@@ -66,6 +68,16 @@ if(!is.null(tbls$postgres)) {
     result <- q %>% collect
     expect_equal(result$y, c(1.5, 2.0, 3.0, 4.0, 4.5))
     expect_equal(result$z, c(2.0, 2.5, 3.0, 3.5, 4.0))
+  })
+
+  test_that("with summarise", {
+    q <- temp_tbl2 %>%
+      group_by(group) %>%
+      arrange(group) %>%
+      summarise(total = sum(value)) %>%
+      mutate(y=moving_mean(total, 1))
+    result <- q %>% collect
+    expect_equal(result$y[1:6], c(82.5, 84, 87, 90, 93, 96))
   })
   
 }
