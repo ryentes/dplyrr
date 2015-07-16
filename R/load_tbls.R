@@ -29,10 +29,14 @@ load_tbls <- function(db,
     tbl_name <- tbl_names[i]
     tbl_obj_name <- tbl_obj_names[i]
     load_tbl <- function() {
-      assign(tbl_obj_name, dplyr::tbl(db, tbl_name), envir = envir)
-      if(verbose) cat(paste(sprintf("Loading: %s\n", tbl_obj_name)))
+      if(DBI::dbExistsTable(db$con, tbl_name)) {
+        assign(tbl_obj_name, dplyr::tbl(db, tbl_name), envir = envir)
+        if(verbose) message(paste(sprintf("Loading: %s", tbl_obj_name)))
+      }
     }
-    if(force || tbl_obj_name %in% ls(envir = envir)) {
+    if(force || !(tbl_obj_name %in% ls(envir = envir))) {
+      load_tbl()
+    } else {
       expr <- sprintf("!dplyr::db_has_table(%s$src$con, '%s')", tbl_obj_name, tbl_name)
       options(show.error.messages = FALSE)
       tryCatch({
@@ -45,8 +49,6 @@ load_tbls <- function(db,
       }, finally={
         options(show.error.messages = TRUE)
       })
-    } else {
-      load_tbl()
     }
   }
   invisible()

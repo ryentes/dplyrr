@@ -1,3 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^my_db.sqlite3$
+
+README.Rmd
+README.html
+README_cache
