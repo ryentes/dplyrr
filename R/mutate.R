@@ -65,6 +65,7 @@ mutate_.tbl_sql <- function(.data, ..., .dots) {
       new$query$sql <- stringr::str_replace(new$query$sql, UNBOUNDED, preceding)
       new$query$sql <- stringr::str_replace(new$query$sql, UNBOUNDED, following)
     }
+    class(new$query$sql) <- c("sql", "character")
   }
   if(length(first_value_infos) > 0) {
     RANK <- "rank\\(\\)"
@@ -89,6 +90,7 @@ mutate_.tbl_sql <- function(.data, ..., .dots) {
       }
       new$query$sql <- stringr::str_replace(new$query$sql, stringr::fixed(target_str), replace_str)
     }
+    class(new$query$sql) <- c("sql", "character")
   }
   ### end added area ###
   # If we're creating a variable that uses a window function, it's
