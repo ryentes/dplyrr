@@ -22,8 +22,10 @@ test_that("Any name of db", {
 test_that("Reload tables", {
   db <- src_sqlite("my_db.sqlite3")
   load_tbls(db, verbose = FALSE)
-  load_tbls(db)
-#   expect_message(load_tbls(db), "")
+  with_mock(
+    message = function(...) stop(),
+    load_tbls(db)
+  )
 })
 
 test_that("force", {
